@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}My Leaves{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between mb-3"><h2>My Leave Applications</h2><a class="btn btn-primary" href="{% url 'apply_leave' %}">Apply Leave</a></div>
+<div class="table-responsive"><table class="table table-bordered table-hover">
+<thead><tr><th>Type</th><th>From</th><th>To</th><th>Permission</th><th>Status</th><th>Applied</th></tr></thead>
+<tbody>{% for leave in leaves %}
+<tr><td>{{ leave.get_leave_type_display }}</td><td>{{ leave.from_date }}</td><td>{{ leave.to_date }}</td><td>{{ leave.permission_hours }} hr</td><td><span class="badge bg-secondary">{{ leave.get_status_display }}</span></td><td>{{ leave.applied_at|date:"d-m-Y H:i" }}</td></tr>
+{% empty %}<tr><td colspan="6">No leave applications.</td></tr>{% endfor %}</tbody>
+</table></div>
+{% endblock %}

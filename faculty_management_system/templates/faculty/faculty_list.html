@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Faculty Directory{% endblock %}
+{% block content %}
+<h2 class="mb-3">Faculty Directory</h2>
+<form class="row g-2 mb-3">
+  <div class="col-md-6"><input class="form-control" name="q" value="{{ q }}" placeholder="Search faculty, ID or department"></div>
+  <div class="col-auto"><button class="btn btn-primary">Search</button></div>
+</form>
+<div class="table-responsive">
+<table class="table table-striped table-bordered align-middle">
+<thead><tr><th>Faculty ID</th><th>Name</th><th>Department</th><th>Designation</th><th>DOB</th><th>Joining Date</th></tr></thead>
+<tbody>
+{% for f in faculty %}
+<tr><td>{{ f.faculty_id }}</td><td>{{ f.full_name }}</td><td>{{ f.department }}</td><td>{{ f.get_designation_display }}</td><td>{{ f.date_of_birth }}</td><td>{{ f.date_of_joining }}</td></tr>
+{% empty %}<tr><td colspan="6">No faculty found.</td></tr>{% endfor %}
+</tbody></table>
+</div>
+{% endblock %}

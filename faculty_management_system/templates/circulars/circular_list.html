@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Circulars{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between mb-3"><h2>College Circulars</h2><a class="btn btn-primary" href="{% url 'create_circular' %}">Create Circular</a></div>
+{% for c in circulars %}
+<div class="card shadow-sm mb-3"><div class="card-body">
+<h5>{{ c.circular_number }} - {{ c.subject }}</h5>
+<p class="text-muted">{{ c.published_at|date:"d M Y, h:i A" }} | By {{ c.created_by.get_full_name|default:c.created_by.username }}</p>
+<p>{{ c.content|linebreaksbr }}</p>
+{% if c.attachment %}<a class="btn btn-sm btn-outline-primary" href="{{ c.attachment.url }}" target="_blank">Download Attachment</a>{% endif %}
+</div></div>
+{% empty %}<p>No circulars published.</p>{% endfor %}
+{% endblock %}

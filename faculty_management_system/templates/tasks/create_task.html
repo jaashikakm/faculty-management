@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Assign Task{% endblock %}
+{% block content %}
+<div class="row justify-content-center"><div class="col-lg-8"><div class="card shadow-sm"><div class="card-body">
+<h2>Assign Task</h2>
+<form method="post" enctype="multipart/form-data">
+{% csrf_token %}{{ form.non_field_errors }}
+{{ form.as_p }}
+<label class="form-label fw-bold">Assign to Faculty</label>
+<div class="faculty-picker border rounded p-3">
+{% for f in faculty %}
+<div class="form-check">
+<input class="form-check-input" type="checkbox" name="faculty_ids" value="{{ f.pk }}" id="f{{ f.pk }}">
+<label class="form-check-label" for="f{{ f.pk }}">{{ f.faculty_id }} - {{ f.full_name }} ({{ f.department.code }})</label>
+</div>
+{% endfor %}
+</div>
+<button class="btn btn-primary mt-3">Assign Task</button>
+</form>
+</div></div></div></div>
+{% endblock %}

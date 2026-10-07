@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h2>Welcome, {{ user.get_full_name|default:user.username }}</h2>
+    <p class="text-muted mb-0">Faculty Management Dashboard</p>
+  </div>
+  {% if profile %}<span class="badge bg-secondary">{{ profile.department.code }} | {{ profile.designation }}</span>{% endif %}
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-3"><div class="card stat-card"><div class="card-body"><h6>Pending My Leaves</h6><h2>{{ pending_leaves }}</h2></div></div></div>
+  <div class="col-md-3"><div class="card stat-card"><div class="card-body"><h6>My Tasks</h6><h2>{{ my_tasks|length }}</h2></div></div></div>
+  <div class="col-md-3"><div class="card stat-card"><div class="card-body"><h6>Birthdays Today</h6><h2>{{ birthdays|length }}</h2></div></div></div>
+  <div class="col-md-3"><div class="card stat-card"><div class="card-body"><h6>Anniversaries Today</h6><h2>{{ anniversaries|length }}</h2></div></div></div>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-header fw-bold">🎂 Birthday Wishes</div>
+      <div class="card-body">
+        {% for person in birthdays %}
+          <div class="mb-2">Happy Birthday <strong>{{ person.full_name }}</strong>! 🎉</div>
+        {% empty %}<p class="text-muted mb-0">No birthdays today.</p>{% endfor %}
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-header fw-bold">🎉 College/Joining Anniversary</div>
+      <div class="card-body">
+        {% for person in anniversaries %}
+          <div class="mb-2">Best wishes to <strong>{{ person.full_name }}</strong> on their joining anniversary!</div>
+        {% empty %}<p class="text-muted mb-0">No anniversaries today.</p>{% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if is_admin_role %}
+<div class="row g-4 mt-1">
+  <div class="col-lg-7">
+    <div class="card shadow-sm">
+      <div class="card-header fw-bold">Pending Leave Requests</div>
+      <div class="card-body">
+        {% for leave in leave_requests %}
+        <div class="border-bottom py-2">
+          <strong>{{ leave.faculty.full_name }}</strong> —
+          {{ leave.get_leave_type_display }} —
+          {{ leave.from_date }} to {{ leave.to_date }}
+        </div>
+        {% empty %}<p class="text-muted">No pending requests.</p>{% endfor %}
+        <a href="{% url 'pending_leaves' %}" class="btn btn-sm btn-outline-primary mt-3">Manage Leave</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="card shadow-sm">
+      <div class="card-header fw-bold">Administration</div>
+      <div class="card-body d-grid gap-2">
+        <a class="btn btn-primary" href="{% url 'create_task' %}">Assign Task</a>
+        <a class="btn btn-outline-primary" href="{% url 'create_circular' %}">Create Circular</a>
+        <a class="btn btn-outline-secondary" href="{% url 'faculty_list' %}">Faculty Directory</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<div class="card shadow-sm mt-4">
+  <div class="card-header fw-bold">Latest Circulars</div>
+  <div class="card-body">
+    {% for c in circulars %}
+      <div class="border-bottom py-2">
+        <strong>{{ c.circular_number }}</strong> - {{ c.subject }}
+        {% if c.attachment %}<a href="{{ c.attachment.url }}" target="_blank">View attachment</a>{% endif %}
+      </div>
+    {% empty %}<p class="text-muted mb-0">No circulars available.</p>{% endfor %}
+  </div>
+</div>
+{% endblock %}

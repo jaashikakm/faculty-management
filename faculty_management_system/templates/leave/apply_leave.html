@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Apply Leave{% endblock %}
+{% block content %}
+<div class="row justify-content-center"><div class="col-lg-8">
+<div class="card shadow-sm"><div class="card-body">
+<h3>Apply for Leave / Permission</h3>
+<div class="alert alert-info">
+<strong>Rules:</strong> CL = 1 per month; Permission = 2 hours per month (maximum 1 hour per request);
+EL = 12 days per June–May leave year; Medical Leave = 6 days per June–May leave year.
+</div>
+<form method="post" enctype="multipart/form-data">
+{% csrf_token %}
+{{ form.non_field_errors }}
+<div class="row g-3">
+<div class="col-md-6"><label class="form-label">Leave Type</label>{{ form.leave_type }}</div>
+<div class="col-md-6"><label class="form-label">Permission Hours</label>{{ form.permission_hours }}</div>
+<div class="col-md-6"><label class="form-label">From Date</label>{{ form.from_date }}</div>
+<div class="col-md-6"><label class="form-label">To Date</label>{{ form.to_date }}</div>
+<div class="col-12"><label class="form-label">Reason</label>{{ form.reason }}</div>
+<div class="col-12"><label class="form-label">Attachment</label>{{ form.attachment }}</div>
+</div>
+<button class="btn btn-primary mt-3">Submit Application</button>
+<a href="{% url 'my_leaves' %}" class="btn btn-outline-secondary mt-3">Cancel</a>
+</form>
+</div></div></div></div>
+{% endblock %}

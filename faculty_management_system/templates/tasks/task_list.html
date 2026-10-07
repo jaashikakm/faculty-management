@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Tasks{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between mb-3"><h2>Task Management</h2>{% if is_admin %}<a class="btn btn-primary" href="{% url 'create_task' %}">Assign Task</a>{% endif %}</div>
+{% for task in tasks %}
+<div class="card shadow-sm mb-3"><div class="card-body">
+<div class="d-flex justify-content-between"><h5>{{ task.title }}</h5><span class="badge bg-warning text-dark">{{ task.get_priority_display }}</span></div>
+<p>{{ task.description }}</p><p><strong>Due:</strong> {{ task.due_date }} | <strong>Assigned by:</strong> {{ task.assigned_by.get_full_name|default:task.assigned_by.username }}</p>
+{% for a in task.assignments.all %}
+<div class="border-top pt-2 mt-2">
+{{ a.faculty.full_name }} — <strong>{{ a.get_status_display }}</strong>
+{% if not is_admin %}
+<form method="post" action="{% url 'update_task_status' a.pk %}" class="row g-2 mt-1">{% csrf_token %}
+<div class="col-md-3"><select class="form-select" name="status"><option value="PENDING">Pending</option><option value="IN_PROGRESS">In Progress</option><option value="COMPLETED">Completed</option></select></div>
+<div class="col-md-6"><input class="form-control" name="remarks" placeholder="Remarks"></div>
+<div class="col-md-3"><button class="btn btn-outline-primary">Update</button></div>
+</form>
+{% endif %}
+</div>
+{% endfor %}
+</div></div>
+{% empty %}<p class="text-muted">No tasks available.</p>{% endfor %}
+{% endblock %}

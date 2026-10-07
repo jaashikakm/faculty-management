@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Pending Leave Requests{% endblock %}
+{% block content %}
+<h2>Pending Leave Requests</h2>
+<div class="table-responsive"><table class="table table-bordered align-middle">
+<thead><tr><th>Faculty</th><th>Department</th><th>Type</th><th>Dates</th><th>Reason</th><th>Action</th></tr></thead>
+<tbody>{% for leave in leaves %}
+<tr>
+<td>{{ leave.faculty.full_name }}</td><td>{{ leave.faculty.department.code }}</td><td>{{ leave.get_leave_type_display }}</td>
+<td>{{ leave.from_date }} to {{ leave.to_date }}{% if leave.leave_type == "PERMISSION" %}<br>{{ leave.permission_hours }} hour{% endif %}</td>
+<td>{{ leave.reason }}</td>
+<td class="text-nowrap">
+<form method="post" action="{% url 'approve_leave' leave.pk %}" class="d-inline">{% csrf_token %}<button class="btn btn-success btn-sm">Approve</button></form>
+<form method="post" action="{% url 'reject_leave' leave.pk %}" class="d-inline">{% csrf_token %}<button class="btn btn-danger btn-sm">Reject</button></form>
+</td>
+</tr>
+{% empty %}<tr><td colspan="6">No pending requests.</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}
